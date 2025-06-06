@@ -1,5 +1,7 @@
 package org.example.backend.mapper;
 
+import org.example.backend.entities.Roysched;
+import org.example.backend.dto.RoyschedDto;
 import org.example.backend.entities.Title;
 import org.example.backend.dto.TitleDto;
 import org.mapstruct.*;
@@ -12,4 +14,11 @@ public interface TitleMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Title partialUpdate(TitleDto titleDto, @MappingTarget Title title);
+
+    Roysched toEntity(RoyschedDto royschedDto);
+
+    RoyschedDto toDto(Roysched roysched);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    Roysched partialUpdate(RoyschedDto royschedDto, @MappingTarget Roysched roysched);
 }

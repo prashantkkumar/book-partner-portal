@@ -2,13 +2,15 @@ package org.example.backend.mapper;
 
 import java.time.Instant;
 import javax.annotation.processing.Generated;
+import org.example.backend.dto.RoyschedDto;
 import org.example.backend.dto.TitleDto;
+import org.example.backend.entities.Roysched;
 import org.example.backend.entities.Title;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-06-06T15:54:37+0530",
+    date = "2025-06-06T20:01:55+0530",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.14 (JetBrains s.r.o.)"
 )
 @Component
@@ -101,5 +103,64 @@ public class TitleMapperImpl implements TitleMapper {
         }
 
         return title;
+    }
+
+    @Override
+    public Roysched toEntity(RoyschedDto royschedDto) {
+        if ( royschedDto == null ) {
+            return null;
+        }
+
+        Roysched roysched = new Roysched();
+
+        roysched.setId( royschedDto.id() );
+        roysched.setLorange( royschedDto.lorange() );
+        roysched.setHirange( royschedDto.hirange() );
+        roysched.setRoyalty( royschedDto.royalty() );
+
+        return roysched;
+    }
+
+    @Override
+    public RoyschedDto toDto(Roysched roysched) {
+        if ( roysched == null ) {
+            return null;
+        }
+
+        Integer id = null;
+        Integer lorange = null;
+        Integer hirange = null;
+        Integer royalty = null;
+
+        id = roysched.getId();
+        lorange = roysched.getLorange();
+        hirange = roysched.getHirange();
+        royalty = roysched.getRoyalty();
+
+        RoyschedDto royschedDto = new RoyschedDto( id, lorange, hirange, royalty );
+
+        return royschedDto;
+    }
+
+    @Override
+    public Roysched partialUpdate(RoyschedDto royschedDto, Roysched roysched) {
+        if ( royschedDto == null ) {
+            return roysched;
+        }
+
+        if ( royschedDto.id() != null ) {
+            roysched.setId( royschedDto.id() );
+        }
+        if ( royschedDto.lorange() != null ) {
+            roysched.setLorange( royschedDto.lorange() );
+        }
+        if ( royschedDto.hirange() != null ) {
+            roysched.setHirange( royschedDto.hirange() );
+        }
+        if ( royschedDto.royalty() != null ) {
+            roysched.setRoyalty( royschedDto.royalty() );
+        }
+
+        return roysched;
     }
 }

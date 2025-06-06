@@ -8,6 +8,8 @@ import java.util.List;
 @Repository
 public interface TitleRepository extends JpaRepository<Title, String> {
     List<Title> findByType(String type);
-    List<Title> findByPub_PubId(String pubId); // ✅ Correct method signature
+    List<Title> findByPub_PubId(String pubId); //
+    List<Title> findByTypeIgnoreCase(String type);
+
 }
 
