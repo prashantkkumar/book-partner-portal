@@ -1,4 +1,4 @@
-package org.example.backend;
+package org.example.backend.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -15,7 +15,7 @@ public class Roysched {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "title_id")
-    private org.example.backend.Title title;
+    private Title title;
 
     @Column(name = "lorange")
     private Integer lorange;

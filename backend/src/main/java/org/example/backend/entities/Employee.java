@@ -1,4 +1,4 @@
-package org.example.backend;
+package org.example.backend.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -28,7 +28,7 @@ public class Employee {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @ColumnDefault("1")
     @JoinColumn(name = "job_id", nullable = false)
-    private org.example.backend.Job job;
+    private Job job;
 
     @ColumnDefault("10")
     @Column(name = "job_lvl")
@@ -37,7 +37,7 @@ public class Employee {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @ColumnDefault("'9952'")
     @JoinColumn(name = "pub_id", nullable = false)
-    private org.example.backend.Publisher pub;
+    private Publisher pub;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "hire_date", nullable = false)

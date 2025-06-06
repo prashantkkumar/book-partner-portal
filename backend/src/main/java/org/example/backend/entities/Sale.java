@@ -1,4 +1,4 @@
-package org.example.backend;
+package org.example.backend.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -17,12 +17,12 @@ public class Sale {
     @MapsId("storId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "stor_id", nullable = false)
-    private org.example.backend.Store stor;
+    private Store stor;
 
     @MapsId("titleId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "title_id", nullable = false)
-    private org.example.backend.Title title;
+    private Title title;
 
     @Column(name = "ord_date", nullable = false)
     private Instant ordDate;

@@ -1,4 +1,4 @@
-package org.example.backend;
+package org.example.backend.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -16,7 +16,7 @@ public class Discount {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stor_id")
-    private org.example.backend.Store stor;
+    private Store stor;
 
     @Column(name = "lowqty")
     private Short lowqty;
