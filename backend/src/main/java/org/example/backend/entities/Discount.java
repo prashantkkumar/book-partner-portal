@@ -11,6 +11,12 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "discounts")
 public class Discount {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+
     @Column(name = "discounttype", nullable = false, length = 40)
     private String discounttype;
 
