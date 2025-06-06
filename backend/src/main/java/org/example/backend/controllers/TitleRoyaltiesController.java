@@ -51,7 +51,7 @@ public class TitleRoyaltiesController {
 
     @GetMapping("/titles/pub/{pubId}")
     public ResponseEntity<List<Title>> getTitlesByPublisher(@PathVariable String pubId) {
-        return ResponseEntity.ok(titleRepository.findByPublisherPubId(pubId));
+        return ResponseEntity.ok(titleRepository.findByPub_PubId(pubId));
     }
 
     // ----------- Roysched Endpoints -----------
