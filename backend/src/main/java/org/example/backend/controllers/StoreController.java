@@ -23,5 +23,33 @@ public class StoreController {
     public List<Store> getAllStores(){
         return store.findAll();
     }
+
+    // GET /api/stores/{stor_id} - Get store by ID
+    @GetMapping("/{stor_id}")
+    public ResponseEntity<Store> getStoreById(@PathVariable String stor_id) {
+        Optional<Store> stores = store.findById(stor_id);
+        return stores.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    // GET /api/stores/city/{city} - Get stores by city
+    @GetMapping("/city/{city}")
+    public List<Store> getStoresByCity(@PathVariable String city) {
+        return store.findByCity(city);
+    }
+
+    // GET /api/stores/state/{state} - Get stores by state
+    @GetMapping("/state/{state}")
+    public List<Store> getStoresByState(@PathVariable String state) {
+        return store.findByState(state);
+    }
+
+    // GET /api/stores/zip/{zip} - Get stores by ZIP
+    @GetMapping("/zip/{zip}")
+    public List<Store> getStoresByZip(@PathVariable String zip) {
+        return store.findByZip(zip);
+    }
+
+
+
 }
 
