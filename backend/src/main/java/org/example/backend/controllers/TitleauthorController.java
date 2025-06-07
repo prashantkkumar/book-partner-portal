@@ -26,17 +26,24 @@ public class TitleauthorController {
     private final AuthorRepository authorRepository;
     private final TitleRepository titleRepository;
 
-    // GET /api/titleauthor/{auId}  – Get all titles by an author
+    //Get all titles by an author
     @GetMapping("/{auId}")
-    public ResponseEntity<List<Titleauthor>> getTitlesByAuthor(@PathVariable String auId) {
+    public ResponseEntity<List<TitleauthorDto>> getTitlesByAuthor(@PathVariable String auId) {
         if (!authorRepository.existsById(auId)) {
             return ResponseEntity.notFound().build();
         }
+
         List<Titleauthor> list = titleauthorRepository.findByAu_AuId(auId);
-        return ResponseEntity.ok(list);
+        List<TitleauthorDto> dtoList = list.stream()
+                .map(titleauthorMapper::toDto)
+                .toList(); // or .collect(Collectors.toList()) if using Java <16
+
+        return ResponseEntity.ok(dtoList);
     }
 
 
+
+    // POST Map the Author By Title
     @PostMapping
     public ResponseEntity<Titleauthor> assignTitleToAuthor(
             @RequestBody TitleauthorPayload payload
@@ -44,12 +51,10 @@ public class TitleauthorController {
         String auId = payload.getIdDto().getAuId();
         String titleId = payload.getIdDto().getTitleId();
 
-        // 1) Must have both author and title exist
         if (!authorRepository.existsById(auId) || !titleRepository.existsById(titleId)) {
             return ResponseEntity.badRequest().build();
         }
 
-        // 2) Build the composite‐key object & entity
         TitleauthorId id = new TitleauthorId();
         id.setAuId(auId);
         id.setTitleId(titleId);
@@ -57,7 +62,6 @@ public class TitleauthorController {
         Titleauthor entity = titleauthorMapper.toEntity(payload.getDto(), payload.getIdDto());
         entity.setId(id);
 
-        // 3) Ensure the “au” and “title” references are populated (MapStruct @Mapping took care of it)
         Author auEntity = authorRepository.getReferenceById(auId);
         Title titleEntity = titleRepository.getReferenceById(titleId);
         entity.setAu(auEntity);
@@ -67,7 +71,6 @@ public class TitleauthorController {
         return ResponseEntity.ok(saved);
     }
 
-    // Inner static class just to bundle the two DTOs (idDto + dataDto).
     private static class TitleauthorPayload {
         private TitleauthorIdDto idDto;
         private TitleauthorDto dto;
