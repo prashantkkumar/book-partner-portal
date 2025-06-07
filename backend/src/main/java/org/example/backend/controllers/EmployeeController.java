@@ -24,7 +24,7 @@ public class EmployeeController {
 
     //  Get all employees
     @GetMapping
-    public List<EmployeeDto> getAllEmployees() {
+    public List<EmployeeDto> getAlgitlEmployees() {
         return employeeRepository.findAll()
                 .stream()
                 .map(employeeMapper::toDto)
