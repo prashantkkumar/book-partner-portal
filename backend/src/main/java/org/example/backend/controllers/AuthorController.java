@@ -18,7 +18,7 @@ public class AuthorController {
     private final AuthorRepository authorRepository;
     private final AuthorMapper authorMapper;
 
-    // GET /api/authors
+    // GET All Authors
     @GetMapping
     public List<AuthorDto> getAllAuthors() {
         return authorRepository.findAll()
@@ -27,14 +27,14 @@ public class AuthorController {
                 .toList();
     }
 
-    // POST /api/authors
+    // POST An Author
     @PostMapping
     public ResponseEntity<AuthorDto> createAuthor(@RequestBody AuthorDto dto) {
         Author saved = authorRepository.save(authorMapper.toEntity(dto));
         return ResponseEntity.ok(authorMapper.toDto(saved));
     }
 
-    // PUT /api/authors/{auId}
+    // PUT Any Author
     @PutMapping("/{auId}")
     public ResponseEntity<AuthorDto> updateAuthor(
             @PathVariable String auId,
@@ -49,7 +49,7 @@ public class AuthorController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // GET /api/authors/{auId}
+    // GET Author By Id
     @GetMapping("/{auId}")
     public ResponseEntity<AuthorDto> getAuthorById(@PathVariable String auId) {
         return authorRepository.findById(auId)
@@ -58,7 +58,7 @@ public class AuthorController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // GET /api/authors/lname/{lname}
+    // GET Author By LastName
     @GetMapping("/lname/{lname}")
     public List<AuthorDto> getByLastName(@PathVariable String lname) {
         return authorRepository.findByAuLname(lname)
@@ -67,7 +67,7 @@ public class AuthorController {
                 .toList();
     }
 
-    // GET /api/authors/fname/{fname}
+    // GET Author by FirstName
     @GetMapping("/fname/{fname}")
     public List<AuthorDto> getByFirstName(@PathVariable String fname) {
         return authorRepository.findByAuFname(fname)
@@ -76,7 +76,7 @@ public class AuthorController {
                 .toList();
     }
 
-    // GET /api/authors/phone/{phone}
+    // GET Author By PhoneNumber
     @GetMapping("/phone/{phone}")
     public List<AuthorDto> getByPhone(@PathVariable String phone) {
         return authorRepository.findByPhone(phone)
@@ -85,7 +85,7 @@ public class AuthorController {
                 .toList();
     }
 
-    // GET /api/authors/zip/{zip}
+    // GET Author By ZipCode
     @GetMapping("/zip/{zip}")
     public List<AuthorDto> getByZip(@PathVariable String zip) {
         return authorRepository.findByZip(zip)
@@ -94,7 +94,7 @@ public class AuthorController {
                 .toList();
     }
 
-    // GET /api/authors/state/{state}
+    // GET Author By State
     @GetMapping("/state/{state}")
     public List<AuthorDto> getByState(@PathVariable String state) {
         return authorRepository.findByState(state)
@@ -103,7 +103,7 @@ public class AuthorController {
                 .toList();
     }
 
-    // GET /api/authors/city/{city}
+    // GET Author By City
     @GetMapping("/city/{city}")
     public List<AuthorDto> getByCity(@PathVariable String city) {
         return authorRepository.findByCity(city)

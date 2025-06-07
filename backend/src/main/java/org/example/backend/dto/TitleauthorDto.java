@@ -12,4 +12,6 @@ import java.io.Serializable;
 public class TitleauthorDto implements Serializable {
     Byte auOrd;
     Integer royaltyper;
+    String authorName;
+    String titleName;
 }
