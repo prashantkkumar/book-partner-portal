@@ -23,5 +23,13 @@ public class StoreController {
     public List<Store> getAllStores(){
         return store.findAll();
     }
+
+    // GET /api/stores/{stor_id} - Get store by ID
+    @GetMapping("/{stor_id}")
+    public ResponseEntity<Store> getStoreById(@PathVariable String stor_id) {
+        Optional<Store> stores = store.findById(stor_id);
+        return stores.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
 }
 
