@@ -38,15 +38,15 @@ public class JobController {
         return ResponseEntity.ok(jobMapper.toDto(saved));
     }
 
-//    @PutMapping("/{job_id}")
-//    public ResponseEntity<JobDto> updateJob(@PathVariable Short job_id, @RequestBody JobDto dto) {
-//        return jobRepository.findById(job_id)
-//                .map(existing -> {
-//                    jobMapper.partialUpdate(dto, existing);
-//                    Job updated = jobRepository.save(existing);
-//                    return ResponseEntity.ok(jobMapper.toDto(updated));
-//                })
-//                .orElse(ResponseEntity.notFound().build());
-//    }
+    @PutMapping("/{job_id}")
+    public ResponseEntity<JobDto> updateJob(@PathVariable Short job_id, @RequestBody JobDto dto) {
+        return jobRepository.findById(job_id)
+                .map(existing -> {
+                    jobMapper.partialUpdate(dto, existing);
+                    Job updated = jobRepository.save(existing);
+                    return ResponseEntity.ok(jobMapper.toDto(updated));
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
 }
 
