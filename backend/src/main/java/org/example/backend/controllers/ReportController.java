@@ -35,7 +35,6 @@ public class ReportController {
     }
 
     // 2. Total sales per store
-
     @GetMapping("/store/sales")
     public ResponseEntity<Map<String, Integer>> getTotalSalesPerStore() {
         List<Sale> sales = salesRepository.findAll();
