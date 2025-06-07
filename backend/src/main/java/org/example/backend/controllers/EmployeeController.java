@@ -52,4 +52,31 @@ public class EmployeeController {
         }
         return ResponseEntity.notFound().build();
     }
+    // Get employee by ID
+    @GetMapping("/{emp_id}")
+    public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable String emp_id) {
+        return employeeRepository.findById(emp_id)
+                .map(employeeMapper::toDto)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    //  Get employees by publisher
+    @GetMapping("/pub/{pub_id}")
+    public List<EmployeeDto> getEmployeesByPublisher(@PathVariable String pub_id) {
+        return employeeRepository.findByPub_PubId(pub_id)
+                .stream()
+                .map(employeeMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    //  Get employees by job
+    @GetMapping("/job/{job_id}")
+    public List<EmployeeDto> getEmployeesByJob(@PathVariable Long job_id) {
+        return employeeRepository.findByJob_Id(job_id)
+                .stream()
+                .map(employeeMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
 }
