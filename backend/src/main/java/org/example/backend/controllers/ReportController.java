@@ -1,11 +1,8 @@
 package org.example.backend.controllers;
 
 import lombok.RequiredArgsConstructor;
-
-import org.example.backend.dto.*;
 import org.example.backend.entities.*;
 import org.example.backend.repository.*;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +17,6 @@ import java.util.stream.Collectors;
 public class ReportController {
 
     private final AuthorRepository authorRepository;
-    private final StoreRepository storeRepository;
     private final TitleRepository titleRepository;
     private final RoyschedRepository royschedRepository;
     private final TitleauthorRepository titleauthorRepository;
