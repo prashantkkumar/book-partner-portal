@@ -1,15 +1,15 @@
 package org.example.backend.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Value;
+import org.example.backend.entities.TitleauthorId;
 
 import java.io.Serializable;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+/**
+ * DTO for {@link TitleauthorId}
+ */
+@Value
 public class TitleauthorIdDto implements Serializable {
-    private String auId;
-    private String titleId;
+    String auId;
+    String titleId;
 }

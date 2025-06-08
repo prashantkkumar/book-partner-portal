@@ -1,6 +1,9 @@
 package org.example.backend.entities;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,18 +14,8 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "discounts")
 public class Discount {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
-
-    @Column(name = "discounttype", nullable = false, length = 40)
-    private String discounttype;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "stor_id")
-    private Store stor;
+    @EmbeddedId
+    private DiscountId id;
 
     @Column(name = "lowqty")
     private Short lowqty;

@@ -2,6 +2,7 @@ package org.example.backend.dto;
 
 import lombok.Value;
 import org.example.backend.entities.Discount;
+import org.example.backend.entities.DiscountId;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -11,8 +12,7 @@ import java.math.BigDecimal;
  */
 @Value
 public class DiscountDto implements Serializable {
-    Long id;
-    String discounttype;
+    DiscountId id;
     Short lowqty;
     Short highqty;
     BigDecimal discount;
