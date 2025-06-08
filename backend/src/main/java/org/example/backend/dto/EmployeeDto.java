@@ -17,4 +17,6 @@ public class EmployeeDto implements Serializable {
     String lname;
     Integer jobLvl;
     Instant hireDate;
+     Short jobId;
+     String pubId;
 }
