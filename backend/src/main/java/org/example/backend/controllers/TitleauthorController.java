@@ -3,11 +3,11 @@ package org.example.backend.controllers;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.dto.TitleauthorDto;
 import org.example.backend.dto.TitleauthorIdDto;
+import org.example.backend.dto.TitleauthorPayload;
 import org.example.backend.entities.Author;
 import org.example.backend.entities.Title;
 import org.example.backend.entities.Titleauthor;
 import org.example.backend.entities.TitleauthorId;
-import org.example.backend.mapper.TitleauthorMapper;
 import org.example.backend.repository.AuthorRepository;
 import org.example.backend.repository.TitleRepository;
 import org.example.backend.repository.TitleauthorRepository;
@@ -22,11 +22,10 @@ import java.util.List;
 public class TitleauthorController {
 
     private final TitleauthorRepository titleauthorRepository;
-    private final TitleauthorMapper titleauthorMapper;
     private final AuthorRepository authorRepository;
     private final TitleRepository titleRepository;
 
-    //Get all titles by an author
+    // Get all titles by an author
     @GetMapping("/{auId}")
     public ResponseEntity<List<TitleauthorDto>> getTitlesByAuthor(@PathVariable String auId) {
         if (!authorRepository.existsById(auId)) {
@@ -35,60 +34,49 @@ public class TitleauthorController {
 
         List<Titleauthor> list = titleauthorRepository.findByAu_AuId(auId);
         List<TitleauthorDto> dtoList = list.stream()
-                .map(titleauthorMapper::toDto)
-                .toList(); // or .collect(Collectors.toList()) if using Java <16
+                .map(titleauthor -> {
+                    TitleauthorDto dto = new TitleauthorDto();
+                    dto.setAuOrd(titleauthor.getAuOrd());
+                    dto.setRoyaltyper(titleauthor.getRoyaltyper());
+                    dto.setAuthorName(titleauthor.getAu().getAuLname());
+                    dto.setTitleName(titleauthor.getTitle().getTitle());
+                    return dto;
+                })
+                .toList();
 
         return ResponseEntity.ok(dtoList);
     }
 
-
-
-    // POST Map the Author By Title
+    // POST: Map the Author By Title
     @PostMapping
-    public ResponseEntity<Titleauthor> assignTitleToAuthor(
-            @RequestBody TitleauthorPayload payload
-    ) {
-        String auId = payload.getIdDto().getAuId();
-        String titleId = payload.getIdDto().getTitleId();
+    public ResponseEntity<Titleauthor> assignTitleToAuthor(@RequestBody TitleauthorPayload payload) {
+        try {
+            String auId = payload.getIdDto().getAuId();
+            String titleId = payload.getIdDto().getTitleId();
 
-        if (!authorRepository.existsById(auId) || !titleRepository.existsById(titleId)) {
-            return ResponseEntity.badRequest().build();
-        }
+            if (!authorRepository.existsById(auId) || !titleRepository.existsById(titleId)) {
+                return ResponseEntity.badRequest().body(null);
+            }
 
-        TitleauthorId id = new TitleauthorId();
-        id.setAuId(auId);
-        id.setTitleId(titleId);
+            TitleauthorId id = new TitleauthorId();
+            id.setAuId(auId);
+            id.setTitleId(titleId);
 
-        Titleauthor entity = titleauthorMapper.toEntity(payload.getDto(), payload.getIdDto());
-        entity.setId(id);
+            Titleauthor entity = new Titleauthor();
+            entity.setId(id);
+            entity.setAuOrd(payload.getDto().getAuOrd());
+            entity.setRoyaltyper(payload.getDto().getRoyaltyper());
 
-        Author auEntity = authorRepository.getReferenceById(auId);
-        Title titleEntity = titleRepository.getReferenceById(titleId);
-        entity.setAu(auEntity);
-        entity.setTitle(titleEntity);
+            Author author = authorRepository.getReferenceById(auId);
+            Title title = titleRepository.getReferenceById(titleId);
+            entity.setAu(author);
+            entity.setTitle(title);
 
-        Titleauthor saved = titleauthorRepository.save(entity);
-        return ResponseEntity.ok(saved);
-    }
-
-    private static class TitleauthorPayload {
-        private TitleauthorIdDto idDto;
-        private TitleauthorDto dto;
-
-        public TitleauthorIdDto getIdDto() {
-            return idDto;
-        }
-
-        public void setIdDto(TitleauthorIdDto idDto) {
-            this.idDto = idDto;
-        }
-
-        public TitleauthorDto getDto() {
-            return dto;
-        }
-
-        public void setDto(TitleauthorDto dto) {
-            this.dto = dto;
+            Titleauthor saved = titleauthorRepository.save(entity);
+            return ResponseEntity.ok(saved);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
         }
     }
 }
