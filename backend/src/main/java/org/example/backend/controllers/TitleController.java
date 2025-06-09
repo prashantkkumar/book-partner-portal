@@ -120,6 +120,6 @@ public class TitleController {
 
     @GetMapping("/test")
     public String testEndpoint() {
-        return "Final Testing1";
+        return "Final";
     }
 }
