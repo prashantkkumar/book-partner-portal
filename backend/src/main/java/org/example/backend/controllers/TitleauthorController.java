@@ -1,6 +1,8 @@
 package org.example.backend.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.example.backend.dto.AuthorBookDto;
+import org.example.backend.dto.AuthorWithBooksDto;
 import org.example.backend.dto.TitleauthorDto;
 import org.example.backend.entities.Titleauthor;
 import org.example.backend.entities.TitleauthorId;
@@ -11,7 +13,10 @@ import org.example.backend.repository.TitleauthorRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/titleauthor")
@@ -25,12 +30,20 @@ public class TitleauthorController {
 
     // Get all Authors Of Book/Title
     @GetMapping
-    public ResponseEntity<List<TitleauthorDto>> getAllMappings() {
-        List<Titleauthor> allMappings = titleauthorRepository.findAll();
-        List<TitleauthorDto> dtoList = allMappings.stream()
-                .map(titleauthorMapper::toDto)
-                .toList();
-        return ResponseEntity.ok(dtoList);
+    public ResponseEntity<List<AuthorWithBooksDto>> getGroupedAuthorBooks() {
+        List<AuthorBookDto> flatList = titleauthorRepository.fetchAuthorBooks();
+
+        Map<String, AuthorWithBooksDto> groupedMap = new LinkedHashMap<>();
+
+        for (AuthorBookDto dto : flatList) {
+            groupedMap.computeIfAbsent(dto.getAuId(), id ->
+                    new AuthorWithBooksDto(dto.getAuId(), dto.getAuFname(), dto.getAuLname(), new ArrayList<>())
+            );
+            groupedMap.get(dto.getAuId()).getTitles().add(dto.getTitle());
+        }
+
+        List<AuthorWithBooksDto> groupedList = new ArrayList<>(groupedMap.values());
+        return ResponseEntity.ok(groupedList);
     }
 
 
@@ -46,6 +59,16 @@ public class TitleauthorController {
                 .map(titleauthorMapper::toDto)
                 .toList();
 
+        return ResponseEntity.ok(dtoList);
+    }
+
+    //Get full detail
+    @GetMapping("/detailed")
+    public ResponseEntity<List<TitleauthorDto>> getAllMappings() {
+        List<Titleauthor> allMappings = titleauthorRepository.findAll();
+        List<TitleauthorDto> dtoList = allMappings.stream()
+                .map(titleauthorMapper::toDto)
+                .toList();
         return ResponseEntity.ok(dtoList);
     }
 
