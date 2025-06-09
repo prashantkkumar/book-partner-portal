@@ -117,4 +117,9 @@ public class TitleController {
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/test")
+    public String testEndpoint() {
+        return "Hello, this is a test response!";
+    }
 }
