@@ -2,6 +2,7 @@ package org.example.backend.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.example.backend.dto.AuthorBookDto;
+import org.example.backend.dto.AuthorTitleCountDto;
 import org.example.backend.dto.AuthorWithBooksDto;
 import org.example.backend.dto.TitleauthorDto;
 import org.example.backend.entities.Titleauthor;
@@ -27,6 +28,11 @@ public class TitleauthorController {
     private final AuthorRepository authorRepository;
     private final TitleRepository titleRepository;
     private final TitleauthorMapper titleauthorMapper;
+
+    @GetMapping("/author-title-counts")
+    public List<AuthorTitleCountDto> getAuthorTitleCounts() {
+        return titleauthorRepository.fetchAuthorTitleCounts();
+    }
 
     // Get all Authors Of Book/Title
     @GetMapping
