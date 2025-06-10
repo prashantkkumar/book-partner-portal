@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/employees")
-public class EmployeeController {
+public class    EmployeeController {
 
     @Autowired
     private EmployeeRepository employeeRepository;
@@ -42,8 +42,7 @@ public class EmployeeController {
     }
 
     // . Add employee
-
-
+    // Marks this method as a POST endpoint for adding a new employee
     @PostMapping
     public ResponseEntity<?> addEmployee(@RequestBody EmployeeDto req) {
         Job job = jobRepository.findById(req.getJobId())
@@ -71,6 +70,8 @@ public class EmployeeController {
 
 
 // Update employee
+// Update employee based on emp_id from the path and new data from the request body
+
 @PutMapping("/{emp_id}")
 public ResponseEntity<EmployeeDto> updateEmployee(@PathVariable String emp_id, @RequestBody EmployeeDto dto) {
     Optional<Employee> optional = employeeRepository.findById(emp_id);
@@ -88,7 +89,9 @@ public ResponseEntity<EmployeeDto> updateEmployee(@PathVariable String emp_id, @
 @GetMapping("/{emp_id}")
 public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable String emp_id) {
     return employeeRepository.findById(emp_id)
+            // If found, convert the Employee entity to EmployeeDto using the mapper
             .map(employeeMapper::toDto)
+            // If mapping is successful, wrap it in an HTTP 200 OK response
             .map(ResponseEntity::ok)
             .orElse(ResponseEntity.notFound().build());
 }
@@ -97,9 +100,10 @@ public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable String emp_id) 
 @GetMapping("/pub/{pub_id}")
 public List<EmployeeDto> getEmployeesByPublisher(@PathVariable String pub_id) {
     return employeeRepository.findByPub_PubId(pub_id)
+            // Convert the list of Employee entities to a stream
             .stream()
-            .map(employeeMapper::toDto)
-            .collect(Collectors.toList());
+            .map(employeeMapper::toDto);
+
 }
 
 //  Get employees by job
