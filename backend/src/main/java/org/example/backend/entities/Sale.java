@@ -24,6 +24,10 @@ public class Sale {
     @JoinColumn(name = "title_id", nullable = false)
     private Title title;
 
+    // ✅ Add this field and map to ord_num
+    @Column(name = "ord_num", nullable = false, length = 11, insertable = false, updatable = false)
+    private String ordNum;
+
     @Column(name = "ord_date", nullable = false)
     private Instant ordDate;
 
