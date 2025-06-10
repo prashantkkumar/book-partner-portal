@@ -1,12 +1,12 @@
 package org.example.backend.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -42,4 +42,6 @@ public class Author {
     @Column(name = "contract", nullable = false)
     private Integer contract;
 
+    @OneToMany(mappedBy = "au", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Titleauthor> titleauthors = new ArrayList<>();
 }
