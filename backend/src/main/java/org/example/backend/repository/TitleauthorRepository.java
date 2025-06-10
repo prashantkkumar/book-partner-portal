@@ -1,6 +1,7 @@
 package org.example.backend.repository;
 
 import org.example.backend.dto.AuthorBookDto;
+import org.example.backend.dto.AuthorTitleCountDto;
 import org.example.backend.entities.Titleauthor;
 import org.example.backend.entities.TitleauthorId;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,6 +11,12 @@ import java.util.List;
 
 public interface TitleauthorRepository extends JpaRepository<Titleauthor, TitleauthorId> {
     List<Titleauthor> findByAu_AuId(String auId);
+
+    @Query("SELECT new org.example.backend.dto.AuthorTitleCountDto(" +
+            "ta.au.auId, ta.au.auFname, ta.au.auLname, COUNT(ta.title.titleId)) " +
+            "FROM Titleauthor ta " +
+            "GROUP BY ta.au.auId, ta.au.auFname, ta.au.auLname")
+    List<AuthorTitleCountDto> fetchAuthorTitleCounts();
 
     @Query("SELECT new org.example.backend.dto.AuthorBookDto(" +
             "ta.au.auId, ta.au.auFname, ta.au.auLname, ta.title.title) " +
