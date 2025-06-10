@@ -102,8 +102,8 @@ public List<EmployeeDto> getEmployeesByPublisher(@PathVariable String pub_id) {
     return employeeRepository.findByPub_PubId(pub_id)
             // Convert the list of Employee entities to a stream
             .stream()
-            .map(employeeMapper::toDto);
-
+            .map(employeeMapper::toDto)
+            .collect(Collectors.toList());
 }
 
 //  Get employees by job
