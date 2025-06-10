@@ -1,18 +1,12 @@
 package org.example.backend.controllers;
 
 import lombok.RequiredArgsConstructor;
-
-
-import org.example.backend.dto.*;
+import org.example.backend.repository.TitleMonthlySales;
 import org.example.backend.entities.*;
 import org.example.backend.repository.*;
-import org.springframework.data.domain.PageRequest;
-import org.example.backend.entities.*;
-import org.example.backend.repository.*;
-
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,13 +18,11 @@ import java.util.stream.Collectors;
 public class ReportController {
 
     private final AuthorRepository authorRepository;
-
-    private final StoreRepository storeRepository;
-
     private final TitleRepository titleRepository;
     private final RoyschedRepository royschedRepository;
     private final TitleauthorRepository titleauthorRepository;
     private final SaleRepository salesRepository;
+    private final JdbcTemplate jdbcTemplate;
 
 
     // 1. Number of titles per author
@@ -138,14 +130,45 @@ public class ReportController {
 
 
    //7  Total monthly-sales
+
+//    @GetMapping("/monthly-sales")
+//    public ResponseEntity<Map<String, Integer>> getMonthlySalesSummary() {
+//        List<Sale> sales = salesRepository.findAll();
+//        Map<String, Integer> result = new HashMap<>();
+//        for (Sale sale : sales) {
+//            String month = sale.getOrdDate().toString().substring(0, 7); // e.g. "2025-06"
+//            result.put(month, result.getOrDefault(month, 0) + sale.getQty());
+//        }
+//        return ResponseEntity.ok(result);
+//    }
+
+
     @GetMapping("/monthly-sales")
     public ResponseEntity<Map<String, Integer>> getMonthlySalesSummary() {
-        List<Sale> sales = salesRepository.findAll();
+        String sql = "SELECT DATE_FORMAT(`ord_date`, '%Y-%m') AS month, SUM(`qty`) AS totalQty " +
+                "FROM `sales` GROUP BY month";
+
+        List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql);
+
         Map<String, Integer> result = new HashMap<>();
-        for (Sale sale : sales) {
-            String month = sale.getOrdDate().toString().substring(0, 7); // e.g. "2025-06"
-            result.put(month, result.getOrDefault(month, 0) + sale.getQty());
+        for (Map<String, Object> row : rows) {
+            String month = (String) row.get("month");
+            Integer totalQty = ((Number) row.get("totalQty")).intValue();
+            result.put(month, totalQty);
         }
+
+        return ResponseEntity.ok(result);
+    }
+
+//    @GetMapping("/monthly-sales-by-title")
+//    public ResponseEntity<List<TitleMonthlySales>> getTitleMonthlySales() {
+//        List<TitleMonthlySales> result = salesRepository.getTitleMonthlySalesSummary();
+//        return ResponseEntity.ok(result);
+//    }
+
+    @GetMapping("/monthly-sales-all-titles")
+    public ResponseEntity<List<TitleMonthlySales>> getAllTitlesSalesPerStore() {
+        List<TitleMonthlySales> result = salesRepository.getAllTitlesMonthlySalesPerStore();
         return ResponseEntity.ok(result);
     }
 
