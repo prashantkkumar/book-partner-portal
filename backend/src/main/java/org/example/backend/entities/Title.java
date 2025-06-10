@@ -6,6 +6,8 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,7 +25,7 @@ public class Title {
     @Column(name = "type", nullable = false, length = 12)
     private String type;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "pub_id")
     private Publisher pub;
 
@@ -45,4 +47,6 @@ public class Title {
     @Column(name = "pubdate", nullable = false)
     private Instant pubdate;
 
+    @OneToMany(mappedBy = "title", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Titleauthor> titleauthors = new ArrayList<>();
 }
